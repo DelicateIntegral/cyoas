@@ -3,7 +3,7 @@ name: Create Release for build.js/build.css
 on:
   push:
     tags:
-      - 'v*'  # Triggers the workflow on any tag that starts with 'v'
+      - 'v*.*.*-*'  # Triggers the workflow on any tag that starts with 'v'
 
 jobs:
   build:
@@ -19,7 +19,7 @@ jobs:
       shell: bash
 
     - name: Create Release
-      id: create-release
+      id: create_release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -32,7 +32,7 @@ jobs:
     - name: Upload file to release
       uses: actions/upload-release-asset@v1
       env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
         asset_path: build.zip
