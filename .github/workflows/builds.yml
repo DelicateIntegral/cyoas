@@ -15,11 +15,11 @@ jobs:
 
     - name: Zip specific files
       run: |
-        ZIP_NAME="build_files_${{ github.ref_name }}.zip"
-        zip -r "$ZIP_NAME" viewer/js/build.js viewer/css/build.css
+        zip -r build.zip viewer/js/build.js viewer/css/build.css
       shell: bash
 
-    - name: Create GitHub Release
+    - name: Create Release
+      id: create-release
       uses: actions/create-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -28,4 +28,13 @@ jobs:
         release_name: Release ${{ github.ref }}
         draft: true
         prerelease: false
-        files: build_files_${{ github.ref_name }}.zip
+    
+    - name: Upload file to release
+      uses: actions/upload-release-asset@v1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: build.zip
+        asset_name: builds_${{ github.ref_name }}.zip
+        asset_content_type: application/zip
