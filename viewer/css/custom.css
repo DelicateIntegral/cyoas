@@ -1,0 +1,11 @@
+.v-bottom-navigation.v-item-group.theme--light.v-bottom-navigation--fixed {
+  height: 65px !important;
+  white-space: nowrap;
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  overflow-x: scroll;
+}
