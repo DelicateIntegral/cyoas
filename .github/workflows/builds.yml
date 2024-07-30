@@ -1,0 +1,31 @@
+name: Create Release for build.js/build.css
+
+on:
+  push:
+    tags:
+      - 'v*'  # Triggers the workflow on any tag that starts with 'v'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Check out the code
+      uses: actions/checkout@v2
+
+    - name: Zip specific files
+      run: |
+        ZIP_NAME="build_files_${{ github.ref_name }}.zip"
+        zip -r "$ZIP_NAME" js/build.js css/build.css
+      shell: bash
+
+    - name: Create GitHub Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ github.ref }}
+        draft: true
+        prerelease: false
+        files: build_files_${{ github.ref_name }}.zip
