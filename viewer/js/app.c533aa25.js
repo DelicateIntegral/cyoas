@@ -1949,7 +1949,7 @@
                     },
                     objectTitle: function() {
 						var e = this.checkRequireds(this.object);
-                        return 'font-family: "' + this.textStyling.objectTitle + '";font-size: ' + this.textStyling.objectTitleTextSize + "%;text-align: " + this.textStyling.objectTitleAlign + ";color: " + (!e && this.filterStyling.reqCTitleColorIsOn ? this.filterStyling.reqFilterCTitleColor : (this.object.isActive && this.filterStyling.selCTitleColorIsOn ? this.filterStyling.selFilterCTitleColor : this.filterStyling.objectTitleColor)) + ";"
+                        return 'font-family: "' + this.textStyling.objectTitle + '";font-size: ' + this.textStyling.objectTitleTextSize + "%;text-align: " + this.textStyling.objectTitleAlign + ";color: " + (!e && this.filterStyling.reqCTitleColorIsOn ? this.filterStyling.reqFilterCTitleColor : (this.object.isActive && this.filterStyling.selCTitleColorIsOn ? this.filterStyling.selFilterCTitleColor : this.textStyling.objectTitleColor)) + ";"
                     },
                     multiChoiceText: function() {
                         return 'font-family: "' + this.styling.multiChoiceTextFont + '";color: ' + this.textStyling.scoreTextColor + ";font-size: " + this.styling.multiChoiceTextSize + "%;"
@@ -1959,7 +1959,7 @@
                     },
                     objectText: function() {
 						var e = this.checkRequireds(this.object);
-                        return 'font-family: "' + this.textStyling.objectText + '";text-align: ' + this.textStyling.objectTextAlign + ";font-size: " + this.textStyling.objectTextTextSize + "%;color: " + (!e && this.filterStyling.reqCTextColorIsOn ? this.filterStyling.reqFilterCTextColor : (this.object.isActive && this.filterStyling.selCTextColorIsOn ? this.filterStyling.selFilterCTextColor : this.textStyling.objectTextColor)) + ";padding: " + this.textStyling.objectTextPadding + "px;"
+                        return 'font-family: "' + this.textStyling.objectText + '";text-align: ' + this.textStyling.objectTextAlign + ";font-size: " + this.textStyling.objectTextTextSize + "%;color: " + (!e && this.filterStyling.reqCTextColorIsOn ? this.filterStyling.reqFilterCTextColor : (this.object.isActive && this.filterStyling.selCTextColorIsOn ? this.filterStyling.selFilterCTextColor : this.textStyling.objectTextColor)) + ";padding: " + this.objectStyling.objectTextPadding + "px;"
                     },
                     rowBody: function() {
                         var e = "margin-top: 0px;margin-bottom: 0px;"
@@ -2748,26 +2748,6 @@
 																	if (this.app.pointTypes[m].id == coS.id) {
 																		if (coO.isMultipleUseVariable) {
 																			for (var X = coO.multipleUseVariable, x = 0; x < X; x++) {
-																				if (this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) {
-																					coO.forcedActivated ? (coO.forcedActivated = !coO.forcedActivated, coO.numMultipleTimesMinus--, this.selectedOneLess(coO, coR), coO.forcedActivated = !coO.forcedActivated, nC++) : this.selectedOneLess(coO, coR);
-																				}
-																				else {
-																					this.app.pointTypes[m].startingSum -= coSValue;
-																				}
-																			}
-																			if (coO.forcedActivated && nC > 0) {
-																				if ("undefined" === typeof this.app.cancelForcedActivated) this.$set(this.app, "cancelForcedActivated", []);
-																				this.app.cancelForcedActivated.push(coO.id + "/ON#" + nC);
-																			}																			
-																		} else {
-																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum -= coSValue);
-																		}
-																	}
-															} else {
-																for (var m = 0; m < this.app.pointTypes.length; m++)
-																	if (this.app.pointTypes[m].id == coS.id) {
-																		if (coO.isMultipleUseVariable) {
-																			for (var X = coO.multipleUseVariable, x = 0; x < X; x++) {
 																				if (this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum + coSValue < 0) {
 																					coO.forcedActivated ? (coO.forcedActivated = !coO.forcedActivated, coO.numMultipleTimesMinus--, this.selectedOneLess(coO, coR), coO.forcedActivated = !coO.forcedActivated, nC++) : this.selectedOneLess(coO, coR);
 																				}
@@ -2778,10 +2758,30 @@
 																			if (coO.forcedActivated && nC > 0) {
 																				if ("undefined" === typeof this.app.cancelForcedActivated) this.$set(this.app, "cancelForcedActivated", []);
 																				this.app.cancelForcedActivated.push(coO.id + "/ON#" + nC);
+																			}																			
+																		} else {
+																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum + coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum += coSValue);
+																		}
+																	}
+															} else {
+																for (var m = 0; m < this.app.pointTypes.length; m++)
+																	if (this.app.pointTypes[m].id == coS.id) {
+																		if (coO.isMultipleUseVariable) {
+																			for (var X = coO.multipleUseVariable, x = 0; x < X; x++) {
+																				if (this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) {
+																					coO.forcedActivated ? (coO.forcedActivated = !coO.forcedActivated, coO.numMultipleTimesMinus--, this.selectedOneLess(coO, coR), coO.forcedActivated = !coO.forcedActivated, nC++) : this.selectedOneLess(coO, coR);
+																				}
+																				else {
+																					this.app.pointTypes[m].startingSum -= coSValue;
+																				}
+																			}
+																			if (coO.forcedActivated && nC > 0) {
+																				if ("undefined" === typeof this.app.cancelForcedActivated) this.$set(this.app, "cancelForcedActivated", []);
+																				this.app.cancelForcedActivated.push(coO.id + "/ON#" + nC);
 																			}
 																			
 																		} else {
-																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum + coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum += coSValue);
+																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum -= coSValue);
 																		}
 																	}
 															}
@@ -2851,7 +2851,7 @@
 												}
 											}
 										}
-									}									
+									}
 									if (e.setBgmIsOn) {
 										if (e.bgmId) {
 											if ("undefined" === typeof this.app.bgmIsPlaying) this.$set(this.app, "bgmIsPlaying", !1);
@@ -3585,7 +3585,7 @@
 														var coS = coO.scores[b],
 															coSValue = coS.discountIsOn ? coS.discountScore : parseInt(coS.value);
 														var bC = this.checkRequireds(coS);
-														parseInt(aFI[1]) > 1 ? this.activated[fI] = aFI[0] + "/ON#" + (parseInt(aFI[1]) - 1) : this.activated.splice(fI, 1);
+														parseInt(aFI[1]) > 1 ? this.activated[fI] = aFI[0] + "/ON#" + (parseInt(aFI[1]) + 1) : this.activated.splice(fI, 1);
 														var bE = this.checkRequireds(coS);
 														parseInt(aFI[1]) > 1 ? this.activated[fI] = aFI[0] + "/ON#" + (parseInt(aFI[1])) : this.activated.splice(fI, 0, aFI[0] + "/ON#" + aFI[1]);
 														if (bC !== bE) {
@@ -3894,11 +3894,63 @@
                         return this.$store.state.objectWidths
                     },
                     rowTitle: function() {
-                        return 'font-family: "' + this.styling.rowTitle + '";font-size: ' + this.styling.rowTitleTextSize + "%;text-align: " + this.styling.rowTitleAlign + ";color: " + this.styling.rowTitleColor + ";"
+                        return 'font-family: "' + this.textStyling.rowTitle + '";font-size: ' + this.textStyling.rowTitleTextSize + "%;text-align: " + this.textStyling.rowTitleAlign + ";color: " + this.textStyling.rowTitleColor + ";"
                     },
                     styling: function() {
-                        return this.row.isPrivateStyling ? this.row.styling : this.$store.state.app.styling
+                        return this.$store.state.app.styling
                     },
+					rowStyling: function() {
+						if (this.row.privateRowIsOn) return this.row.styling;
+						if ("undefined" !== typeof this.row.rowDesignGroups) {
+							for (var a = 0; a < this.row.rowDesignGroups.length; a++) {
+								if ("undefined" !== typeof this.app.compRDG[this.row.rowDesignGroups[a].id]) {
+									var co = this.app.compRDG[this.row.rowDesignGroups[a].id],
+										coD = this.app.rowDesignGroups[co.designGroups];
+									if (coD.privateRowIsOn) return coD.styling;
+								}
+							}
+						}
+						return this.$store.state.app.styling;
+					},
+					textStyling: function() {
+						if (this.row.privateTextIsOn) return this.row.styling;
+						if ("undefined" !== typeof this.row.rowDesignGroups) {
+							for (var a = 0; a < this.row.rowDesignGroups.length; a++) {
+								if ("undefined" !== typeof this.app.compRDG[this.row.rowDesignGroups[a].id]) {
+									var co = this.app.compRDG[this.row.rowDesignGroups[a].id],
+										coD = this.app.rowDesignGroups[co.designGroups];
+									if (coD.privateTextIsOn) return coD.styling;
+								}
+							}
+						}
+						return this.$store.state.app.styling;
+					},
+					rowImageStyling: function() {
+						if (this.row.privateRowImageIsOn) return this.row.styling;
+						if ("undefined" !== typeof this.row.rowDesignGroups) {
+							for (var a = 0; a < this.row.rowDesignGroups.length; a++) {
+								if ("undefined" !== typeof this.app.compRDG[this.row.rowDesignGroups[a].id]) {
+									var co = this.app.compRDG[this.row.rowDesignGroups[a].id],
+										coD = this.app.rowDesignGroups[co.designGroups];
+									if (coD.privateRowImageIsOn) return coD.styling;
+								}
+							}
+						}
+						return this.$store.state.app.styling;
+					},
+					backgroundStyling: function() {
+						if (this.row.privateBackgroundIsOn) return this.row.styling;
+						if ("undefined" !== typeof this.row.rowDesignGroups) {
+							for (var a = 0; a < this.row.rowDesignGroups.length; a++) {
+								if ("undefined" !== typeof this.app.compRDG[this.row.rowDesignGroups[a].id]) {
+									var co = this.app.compRDG[this.row.rowDesignGroups[a].id],
+										coD = this.app.rowDesignGroups[co.designGroups];
+									if (coD.privateBackgroundIsOn) return coD.styling;
+								}
+							}
+						}
+						return this.$store.state.app.styling;
+					},
                     resultArray: function() {
                         var e, t, o = [];
                         if ("standard" == this.type) {
@@ -3934,25 +3986,25 @@
                         return o
                     },
                     rowBody: function() {
-                        var t = "margin-top: " + this.styling.rowBodyMarginTop + "px;margin-bottom:" + this.styling.rowBodyMarginBottom + "px;"
-                        return this.row.isEditModeOn ? t += "margin-left: 1%;margin-right: 1%;" : t += "margin-left: " + this.styling.rowBodyMarginSides + "%;margin-right: " + this.styling.rowBodyMarginSides + "%;", t
+                        var e = "margin-top: " + this.rowStyling.rowBodyMarginTop + "px;margin-bottom:" + this.rowStyling.rowBodyMarginBottom + "px;";
+                        return this.row.isEditModeOn ? e += "margin-left: 1%;margin-right: 1%;" : e += "margin-left: " + this.rowStyling.rowBodyMarginSides + "%;margin-right: " + this.rowStyling.rowBodyMarginSides + "%;", e
                     },
                     rowText: function() {
-                        var t = 'font-family: "' + this.styling.rowText + '";text-align: ' + this.styling.rowTextAlign + ";font-size: " + this.styling.rowTextTextSize + "%;color: " + this.styling.rowTextColor + ";padding-top: " + this.styling.rowTextPaddingX + "px;padding-bottom: " + this.styling.rowTextPaddingX + "px;";
-                        return this.row.isEditModeOn || (t += "padding-left: " + this.styling.rowTextPaddingY + "%;padding-right: " + this.styling.rowTextPaddingY + "%;"), t
+                        var e = 'font-family: "' + this.textStyling.rowText + '";text-align: ' + this.textStyling.rowTextAlign + ";font-size: " + this.textStyling.rowTextTextSize + "%;color: " + this.textStyling.rowTextColor + ";padding-top: " + this.rowStyling.rowTextPaddingX + "px;padding-bottom: " + this.rowStyling.rowTextPaddingX + "px;";
+                        return this.row.isEditModeOn || (e += "padding-left: " + this.rowStyling.rowTextPaddingY + "%;padding-right: " + this.rowStyling.rowTextPaddingY + "%;"), e
                     },
                     rowButton: function() {
-                        return "padding-left: " + this.styling.rowButtonYPadding + "px;padding-right: " + this.styling.rowButtonYPadding + "px;padding-top: " + this.styling.rowButtonXPadding + "px;padding-bottom: " + this.styling.rowButtonXPadding + "px;color:black;;"
+                        return "padding-left: " + this.rowStyling.rowButtonYPadding + "px;padding-right: " + this.rowStyling.rowButtonYPadding + "px;padding-top: " + this.rowStyling.rowButtonXPadding + "px;padding-bottom: " + this.rowStyling.rowButtonXPadding + "px;color:black;;"
                     },
                     rowBackground: function() {
-                        var t = (this.styling.rowBorderImage ? 'border-image: url("' + this.styling.rowBorderImage + '") ' + this.styling.rowBorderImageSliceTop + ' ' + this.styling.rowBorderImageSliceRight + ' ' + this.styling.rowBorderImageSliceBottom + ' ' + this.styling.rowBorderImageSliceLeft + ' / ' + this.styling.rowBorderImageWidth + 'px '+ this.styling.rowBorderImageRepeat + '; border-style: solid; padding: ' + this.styling.rowBorderImageWidth + 'px !important; ' : "") + (this.styling.rowBackgroundImage ? 'background-image: url("' + this.styling.rowBackgroundImage + '");' + (this.styling.isRowBackgroundRepeat ? "background-repeat: repeat;" : "background-size: cover;") : "") + (this.styling.rowBgColorIsOn ? "background-color: " + this.styling.rowBgColor + ";" : "") + "margin-left:" + this.styling.rowMargin + "%;margin-right: " + this.styling.rowMargin + "%;",
-                            e = this.styling.rowBorderRadiusIsPixels ? "px" : "%";
-                        return this.styling.rowGradientIsOn && (t += this.styling.rowGradientIsOn ? ";background-image: linear-gradient(" + this.styling.rowGradient + ");" : ""), t += "border-radius: " + this.styling.rowBorderRadiusTopLeft + 0 + e + " " + this.styling.rowBorderRadiusTopRight + 0 + e + " " + this.styling.rowBorderRadiusBottomRight + 0 + e + " " + this.styling.rowBorderRadiusBottomLeft + 0 + e + ";", this.styling.rowOverflowIsOn && (t += "overflow:hidden;"), this.styling.rowBorderIsOn && (t += "border: " + this.styling.rowBorderWidth + "px " + this.styling.rowBorderStyle + " " + this.styling.rowBorderColor + ";"), this.styling.rowDropShadowIsOn && (t += "filter: drop-shadow(" + this.styling.rowDropShadowH + "px " + this.styling.rowDropShadowV + "px " + this.styling.rowDropShadowBlur + "px " + this.styling.rowDropShadowColor + ");"), t
+                        var e = (this.rowStyling.rowBorderImage ? 'border-image: url("' + this.rowStyling.rowBorderImage + '") ' + this.rowStyling.rowBorderImageSliceTop + ' ' + this.rowStyling.rowBorderImageSliceRight + ' ' + this.rowStyling.rowBorderImageSliceBottom + ' ' + this.rowStyling.rowBorderImageSliceLeft + ' / ' + this.rowStyling.rowBorderImageWidth + 'px '+ this.rowStyling.rowBorderImageRepeat + '; border-style: solid; padding: ' + this.rowStyling.rowBorderImageWidth + 'px !important; ' : "") + (this.backgroundStyling.rowBackgroundImage ? 'background-image: url("' + this.backgroundStyling.rowBackgroundImage + '");' + (this.backgroundStyling.isRowBackgroundRepeat ? "background-repeat: repeat;" : "background-size: cover;") : "") + (this.backgroundStyling.rowBgColorIsOn ? "background-color: " + this.backgroundStyling.rowBgColor + ";" : "") + "margin-left:" + this.rowStyling.rowMargin + "%;margin-right: " + this.rowStyling.rowMargin + "%;",
+                            t = this.rowStyling.rowBorderRadiusIsPixels ? "px" : "%";
+                        return this.rowStyling.rowGradientIsOn && (e += this.rowStyling.rowGradientIsOn ? ";background-image: linear-gradient(" + this.rowStyling.rowGradient + ");" : ""), e += "border-radius: " + this.rowStyling.rowBorderRadiusTopLeft + 0 + t + " " + this.rowStyling.rowBorderRadiusTopRight + 0 + t + " " + this.rowStyling.rowBorderRadiusBottomRight + 0 + t + " " + this.rowStyling.rowBorderRadiusBottomLeft + 0 + t + ";", this.rowStyling.rowOverflowIsOn && (e += "overflow:hidden;"), this.rowStyling.rowBorderIsOn && (e += "border: " + this.rowStyling.rowBorderWidth + "px " + this.rowStyling.rowBorderStyle + " " + this.rowStyling.rowBorderColor + ";"), this.rowStyling.rowDropShadowIsOn && (e += "filter: drop-shadow(" + this.rowStyling.rowDropShadowH + "px " + this.rowStyling.rowDropShadowV + "px " + this.rowStyling.rowDropShadowBlur + "px " + this.rowStyling.rowDropShadowColor + ");"), e
                     },
                     rowImage: function() {
-                        var t = "width:" + this.styling.rowImageWidth + "%;margin-top:" + this.styling.rowImageMarginTop + "%;margin-bottom:" + this.styling.rowImageMarginBottom + "%;",
-                            e = this.styling.rowImgBorderRadiusIsPixels ? "px" : "%";
-                        return t += "border-radius: " + this.styling.rowImgBorderRadiusTopLeft + 0 + e + " " + this.styling.rowImgBorderRadiusTopRight + 0 + e + " " + this.styling.rowImgBorderRadiusBottomRight + 0 + e + " " + this.styling.rowImgBorderRadiusBottomLeft + 0 + e + ";", this.styling.rowImgOverflowIsOn && (t += "overflow:hidden;"), this.styling.rowImgBorderIsOn && (t += "border: " + this.styling.rowImgBorderWidth + "px " + this.styling.rowImgBorderStyle + " " + this.styling.rowImgBorderColor + ";"), t
+                        var e = "width:" + this.rowImageStyling.rowImageWidth + "%;margin-top:" + this.rowImageStyling.rowImageMarginTop + "%;margin-bottom:" + this.rowImageStyling.rowImageMarginBottom + "%;",
+                            t = this.rowImageStyling.rowImgBorderRadiusIsPixels ? "px" : "%";
+                        return e += "border-radius: " + this.rowImageStyling.rowImgBorderRadiusTopLeft + 0 + t + " " + this.rowImageStyling.rowImgBorderRadiusTopRight + 0 + t + " " + this.rowImageStyling.rowImgBorderRadiusBottomRight + 0 + t + " " + this.rowImageStyling.rowImgBorderRadiusBottomLeft + 0 + t + ";", this.rowImageStyling.rowImgOverflowIsOn && (e += "overflow:hidden;"), this.rowImageStyling.rowImgBorderIsOn && (e += "border: " + this.rowImageStyling.rowImgBorderWidth + "px " + this.rowImageStyling.rowImgBorderStyle + " " + this.rowImageStyling.rowImgBorderColor + ";"), e
                     },
                     rows: function() {
                         return this.$store.state.app.rows
@@ -4037,6 +4089,7 @@
                         })
                     },
                     buttonActivate: function() {
+						console.log(this.row);
                         if (this.row.btnPointAddon && "sumaddon" == this.row.buttonTypeRadio)
                             for (var e = Math.floor(Math.random() * (this.row.randomMax - this.row.randomMin) + this.row.randomMin), t = 0; t < this.app.pointTypes.length; t++) this.app.pointTypes[t].id == this.row.pointTypeRandom && (this.app.pointTypes[t].startingSum += e);
                         else if (this.row.buttonRandom) {
@@ -4691,26 +4744,6 @@
 																	if (this.app.pointTypes[m].id == coS.id) {
 																		if (coO.isMultipleUseVariable) {
 																			for (var X = coO.multipleUseVariable, x = 0; x < X; x++) {
-																				if (this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) {
-																					coO.forcedActivated ? (coO.forcedActivated = !coO.forcedActivated, coO.numMultipleTimesMinus--, this.selectedOneLess(coO, coR), coO.forcedActivated = !coO.forcedActivated, nC++) : this.selectedOneLess(coO, coR);
-																				}
-																				else {
-																					this.app.pointTypes[m].startingSum -= coSValue;
-																				}
-																			}
-																			if (coO.forcedActivated && nC > 0) {
-																				if ("undefined" === typeof this.app.cancelForcedActivated) this.$set(this.app, "cancelForcedActivated", []);
-																				this.app.cancelForcedActivated.push(coO.id + "/ON#" + nC);
-																			}																			
-																		} else {
-																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum -= coSValue);
-																		}
-																	}
-															} else {
-																for (var m = 0; m < this.app.pointTypes.length; m++)
-																	if (this.app.pointTypes[m].id == coS.id) {
-																		if (coO.isMultipleUseVariable) {
-																			for (var X = coO.multipleUseVariable, x = 0; x < X; x++) {
 																				if (this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum + coSValue < 0) {
 																					coO.forcedActivated ? (coO.forcedActivated = !coO.forcedActivated, coO.numMultipleTimesMinus--, this.selectedOneLess(coO, coR), coO.forcedActivated = !coO.forcedActivated, nC++) : this.selectedOneLess(coO, coR);
 																				}
@@ -4721,10 +4754,30 @@
 																			if (coO.forcedActivated && nC > 0) {
 																				if ("undefined" === typeof this.app.cancelForcedActivated) this.$set(this.app, "cancelForcedActivated", []);
 																				this.app.cancelForcedActivated.push(coO.id + "/ON#" + nC);
+																			}																			
+																		} else {
+																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum + coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum += coSValue);
+																		}
+																	}
+															} else {
+																for (var m = 0; m < this.app.pointTypes.length; m++)
+																	if (this.app.pointTypes[m].id == coS.id) {
+																		if (coO.isMultipleUseVariable) {
+																			for (var X = coO.multipleUseVariable, x = 0; x < X; x++) {
+																				if (this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) {
+																					coO.forcedActivated ? (coO.forcedActivated = !coO.forcedActivated, coO.numMultipleTimesMinus--, this.selectedOneLess(coO, coR), coO.forcedActivated = !coO.forcedActivated, nC++) : this.selectedOneLess(coO, coR);
+																				}
+																				else {
+																					this.app.pointTypes[m].startingSum -= coSValue;
+																				}
+																			}
+																			if (coO.forcedActivated && nC > 0) {
+																				if ("undefined" === typeof this.app.cancelForcedActivated) this.$set(this.app, "cancelForcedActivated", []);
+																				this.app.cancelForcedActivated.push(coO.id + "/ON#" + nC);
 																			}
 																			
 																		} else {
-																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum + coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum += coSValue);
+																			(this.app.pointTypes[m].belowZeroNotAllowed && this.app.pointTypes[m].startingSum - coSValue < 0) ? ((coO.forcedActivated = coO.forcedActivated ? !coO.forcedActivated : coO.forcedActivated), this.activateObject(coO, coR)) : (this.app.pointTypes[m].startingSum -= coSValue);
 																		}
 																	}
 															}
@@ -4794,7 +4847,7 @@
 												}
 											}
 										}
-									}									
+									}
 									if (e.setBgmIsOn) {
 										if (e.bgmId) {
 											if ("undefined" === typeof this.app.bgmIsPlaying) this.$set(this.app, "bgmIsPlaying", !1);
@@ -5530,7 +5583,7 @@
 														var coS = coO.scores[b],
 															coSValue = coS.discountIsOn ? coS.discountScore : parseInt(coS.value);
 														var bC = this.checkRequireds(coS);
-														parseInt(aFI[1]) > 1 ? this.activated[fI] = aFI[0] + "/ON#" + (parseInt(aFI[1]) - 1) : this.activated.splice(fI, 1);
+														parseInt(aFI[1]) > 1 ? this.activated[fI] = aFI[0] + "/ON#" + (parseInt(aFI[1]) + 1) : this.activated.splice(fI, 1);
 														var bE = this.checkRequireds(coS);
 														parseInt(aFI[1]) > 1 ? this.activated[fI] = aFI[0] + "/ON#" + (parseInt(aFI[1])) : this.activated.splice(fI, 0, aFI[0] + "/ON#" + aFI[1]);
 														if (bC !== bE) {
@@ -5586,6 +5639,9 @@
 								if ("Scores Updated On: " !== h) this.text = h + ".", this.snackbar = !0;
 							}
 						}
+                    },
+                    updateActivated: function() {
+                        this.$emit("activatedWasChanged", this.activated)
                     },
                     duplicateRow: function(e) {
 						var c, i, j, s, fr, fo, y, z, zx, zy, zz, nR = 0, nF = 0;
@@ -6753,8 +6809,8 @@
 							if (t.app.rows[b].isPrivateStyling && "undefined" === typeof t.app.rows[b].privateRowIsOn) t.$set(t.app.rows[b], "privateRowIsOn", !0);
 							if (t.app.rows[b].isPrivateStyling && "undefined" === typeof t.app.rows[b].privateBackgroundIsOn) t.$set(t.app.rows[b], "privateBackgroundIsOn", !0);
 							if (t.app.rows[b].isPrivateStyling && "undefined" === typeof t.app.rows[b].privateBackgroundIsOn) t.$set(t.app.rows[b], "privateBackgroundIsOn", !0);
-							if ("undefined" === typeof t.app.objectDesignGroups) t.$set(t.app, "objectDesignGroups", {});
-							if ("undefined" === typeof t.app.rowDesignGroups) t.$set(t.app, "rowDesignGroups", {});
+							if ("undefined" === typeof t.app.objectDesignGroups) t.$set(t.app, "objectDesignGroups", []);
+							if ("undefined" === typeof t.app.rowDesignGroups) t.$set(t.app, "rowDesignGroups", []);
 							for (var c = 0; c < t.app.rows[b].objects.length; c++) {
 								var d = t.app.rows[b].objects[c].id;
 								t.app.comp[d] = {rows: b, objects: c};
@@ -6763,8 +6819,9 @@
 								if (t.app.rows[b].objects[c].isPrivateStyling && "undefined" === typeof t.app.rows[b].objects[c].privateObjectImageIsOn) t.$set(t.app.rows[b].objects[c], "privateObjectImageIsOn", !0);
 								if (t.app.rows[b].objects[c].isPrivateStyling && "undefined" === typeof t.app.rows[b].objects[c].privateObjectIsOn) t.$set(t.app.rows[b].objects[c], "privateObjectIsOn", !0);
 								if (t.app.rows[b].objects[c].isPrivateStyling && "undefined" === typeof t.app.rows[b].objects[c].privateBackgroundIsOn) t.$set(t.app.rows[b].objects[c], "privateBackgroundIsOn", !0);
-								if (t.app.rows[b].objects[c].isMultipleUseVariable && "undefined" === typeof t.app.rows[b].objects[c].initMultipleTimesMinus) {
-									t.$set(t.app.rows[b].objects[c], "initMultipleTimesMinus", t.app.rows[b].objects[c].numMultipleTimesMinus);
+								if (t.app.rows[b].objects[c].isMultipleUseVariable && "number" !== typeof t.app.rows[b].objects[c].initMultipleTimesMinus) {
+									t.$set(t.app.rows[b].objects[c], "initMultipleTimesMinus", 0);
+									t.$set(t.app.rows[b].objects[c], "initMultipleTimesMinus", parseInt(t.app.rows[b].objects[c].numMultipleTimesMinus));
 								}
 							}
 						}
@@ -6789,7 +6846,7 @@
 						// 	const image = new Image();
 						// 	image.onerror = () => {t.text = Error_msg, t.snackbar = !0;}
 						// 	image.onload = () => {}
-						// 	image.src = "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWprojectFileYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=";
+						// 	image.src = "data:image/avif;base64,AAAAIGZ0eXBhdmlmAAAAAGF2aWZtaWYxbWlhZk1BMUIAAADybWV0YQAAAAAAAAAoaGRscgAAAAAAAAAAcGljdAAAAAAAAAAAAAAAAGxpYmF2aWYAAAAADnBpdG0AAAAAAAEAAAAeaWxvYwAAAABEAAABAAEAAAABAAABGgAAAB0AAAAoaWluZgAAAAAAAQAAABppbmZlAgAAAAABAABhdjAxQ29sb3IAAAAAamlwcnAAAABLaXBjbwAAABRpc3BlAAAAAAAAAAIAAAACAAAAEHBpeGkAAAAAAwgICAAAAAxhdjFDgQ0MAAAAABNjb2xybmNseAACAAIAAYAAAAAXaXBtYQAAAAAAAAABAAEEAQKDBAAAACVtZGF0EgAKCBgANogQEAwgMg8f8D///8WfhwB8+ErK42A=";
 						// }).catch(() => false);
 					});
 					e.open("GET", "src/delicateworm/light_noimg.json", true), e.send();
@@ -6959,9 +7016,13 @@
                         backpack: [],
 						comp: [],
 						compR: [],
-						compG: [],
+						compG: [],						
+						compODG: [],
+						compRDG: [],
                         words: [],
                         groups: [],
+						rowDesignGroups: [],
+						objectDesignGroups: [],
                         chapters: [],
                         activated: [],
                         rows: [],
@@ -7022,7 +7083,7 @@
                             backgroundImage: "",
                             rowBackgroundImage: "",
                             objectBackgroundImage: "",
-							rowBorderImage: "",
+                            rowBorderImage: "",
                             rowBorderImageRepeat: "stretch",
                             rowBorderImageWidth: 5,
 							rowBorderImageSliceTop: 5,
@@ -7086,18 +7147,17 @@
                             selFilterSepia: 0,
                             selBgColorIsOn: !0,
 							selOverlayOnImage: !1,
-							selFilterBgColor: "#70FF7EFF",
-							selBorderColorIsOn: !1,
-							selFilterBorderColor: "#000000",
-							selCTitleColorIsOn: !1,
-							selFilterCTitleColor: "#000000",
-							selCTextColorIsOn: !1,
-							selFilterCTextColor: "#000000",
-							selATitleColorIsOn: !1,
-							selFilterATitleColor: "#000000",
-							selATextColorIsOn: !1,
-							selFilterATextColor: "#000000",
                             selFilterBgColor: "#70FF7EFF",
+							selBorderColorIsOn: !1,
+							selFilterBorderColor: "#000000FF",
+							selCTitleColorIsOn: !1,
+							selFilterCTitleColor: "#000000FF",
+							selCTextColorIsOn: !1,
+							selFilterCTextColor: "#000000FF",
+							selATitleColorIsOn: !1,
+							selFilterATitleColor: "#000000FF",
+							selATextColorIsOn: !1,
+							selFilterATextColor: "#000000FF",
                             reqFilterBlurIsOn: !1,
                             reqFilterBlur: 0,
                             reqFilterBrightIsOn: !1,
@@ -7120,15 +7180,16 @@
 							reqOverlayOnImage: !1,
                             reqFilterBgColor: "#FFFFFFFF",
 							reqBorderColorIsOn: !1,
-							reqFilterBorderColor: "#000000",
+							reqFilterBorderColor: "#000000FF",
 							reqCTitleColorIsOn: !1,
-							reqFilterCTitleColor: "#000000",
+							reqFilterCTitleColor: "#000000FF",
 							reqCTextColorIsOn: !1,
-							reqFilterCTextColor: "#000000",
+							reqFilterCTextColor: "#000000FF",
 							reqATitleColorIsOn: !1,
-							reqFilterATitleColor: "#000000",
+							reqFilterATitleColor: "#000000FF",
 							reqATextColorIsOn: !1,
-                            reqFilterVisibleIsOn: !1,
+							reqFilterATextColor: "#000000FF",
+							reqFilterVisibleIsOn: !1,
                             rowBorderRadiusTopLeft: 0,
                             rowBorderRadiusTopRight: 0,
                             rowBorderRadiusBottomRight: 0,
